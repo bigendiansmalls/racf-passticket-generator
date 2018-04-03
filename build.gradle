@@ -12,3 +12,28 @@ task(run, dependsOn: jar, type: JavaExec ) {
     main = 'racfPassTicket.example.Main'
     classpath = sourceSets.main.runtimeClasspath
 }
+
+compileJava {
+    doFirst {
+        options.compilerArgs = [
+            '--add-modules', 'java.se.ee',
+        ]
+    }
+}
+compileTestJava {
+    doFirst {
+        options.compilerArgs = [
+            '--add-modules', 'java.xml.bind',
+            '--add-modules', 'java.se.ee',
+        ]
+    }
+}
+test {
+    doFirst {
+        jvmArgs = [
+            '--module-path', classpath.asPath, 
+            '--add-modules', 'ALL-MODULE-PATH', // to resolve all module in the module path to be accessed by gradle test runner
+        ]
+        classpath = files()
+    }
+}
